@@ -10,12 +10,12 @@ watchAuthState(
     console.log(records);
   },
   () => {
-    window.location.href = "/index.html";
+    window.location.href = "./index.html";
   },
 );
 
 // ログアウト
 document.getElementById("logout").addEventListener("click", async () => {
   await signOut(auth);
-  window.location.href = "/index.html";
+  window.location.href = "./index.html";
 });
