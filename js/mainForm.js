@@ -1,5 +1,6 @@
 import { addRecord } from "./db.js";
 import { auth } from "./firebase.js";
+import { loadRecords } from "./mainView.js";
 
 // 選択画面：その他の入力欄表示切替
 function toggleOtherInput(selectElement, otherInputId, otherValue) {
@@ -71,6 +72,7 @@ document.getElementById("recordForm").addEventListener("submit", async (e) => {
   };
 
   await addRecord("records", data);
+  await loadRecords();
   alert("登録しました！");
   e.target.reset();
 });

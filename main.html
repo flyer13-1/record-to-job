@@ -12,6 +12,7 @@
   <body>
     <header>
       <h1>就活応援サイト</h1>
+      <br />
       <button id="logout">ログアウト</button>
     </header>
     <main>
@@ -63,10 +64,10 @@
             />
           </section>
 
-          <section>
+          <section id="testarea" style="display: none">
             <label for="test">試験内容：</label>
             <!-- 1: 筆記試験, 2: 面接試験, 3: グループワーク, 4: その他 -->
-            <select id="test" name="test" required>
+            <select id="test" name="test">
               <option value="">選択してください</option>
               <option value="1">筆記試験</option>
               <option value="2">面接試験</option>
@@ -88,7 +89,7 @@
         </form>
       </article>
 
-      <article id="viewPage" style="display: none">
+      <article id="viewPage">
         <h2>就活情報一覧</h2>
         <table>
           <thead>
@@ -101,6 +102,7 @@
               <th>試験内容</th>
               <th>その他の活動内容</th>
               <th>その他の試験内容</th>
+              <th>削除操作</th>
             </tr>
           </thead>
           <tbody id="infoTableBody">
