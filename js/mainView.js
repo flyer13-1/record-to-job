@@ -1,6 +1,6 @@
 import { getRecords, deleteRecord } from "./db.js";
 
-const DOING_OPTIONS = {
+const doArr = {
   1: "インターン",
   2: "インターン選考",
   3: "オープンカンパニー",
@@ -12,34 +12,33 @@ const DOING_OPTIONS = {
   9: "その他",
 };
 
-const TEST_OPTIONS = {
+const testArr = {
   1: "筆記試験",
   2: "面接試験",
   3: "グループワーク",
   4: "その他",
 };
 
-export const loadRecords = async () => {
-  const records = await getRecords("records");
-  // 活動日で降順ソート
-  records.sort((a, b) => new Date(b.date) - new Date(a.date));
-  console.log("Loaded records:", records);
+export const loadRecords = async (uid) => {
+  const recs = await getRecords("records", uid);
+  // 活動日で昇順ソート
+  recs.sort((a, b) => new Date(a.date) - new Date(b.date));
 
   const tbody = document.getElementById("infoTableBody");
   tbody.innerHTML = "";
 
-  records.forEach((record) => {
+  recs.forEach((rec) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
-    <td>${record.date}</td>
-    <td>${record.dayNum}</td>
-    <td>${record.company}</td>
-    <td>${record.place}</td>
-    <td>${DOING_OPTIONS[record.doing]}</td>
-    <td>${record.test ? TEST_OPTIONS[record.test] : "none"}</td>
-    <td>${record.doingOther ? record.doingOther : "none"}</td>
-    <td>${record.testOther ? record.testOther : "none"}</td>
-    <td><button class="deleteBtn" data-id="${record.id}">削除</button></td>
+    <td>${rec.date}</td>
+    <td>${rec.dayNum}</td>
+    <td>${rec.company}</td>
+    <td>${rec.place}</td>
+    <td>${doArr[rec.doing]}</td>
+    <td>${rec.test ? testArr[rec.test] : "none"}</td>
+    <td>${rec.doingOther ? rec.doingOther : "none"}</td>
+    <td>${rec.testOther ? rec.testOther : "none"}</td>
+    <td><button class="deleteBtn" data-id="${rec.id}">削除</button></td>
   `;
     tbody.appendChild(tr);
   });
@@ -48,8 +47,7 @@ export const loadRecords = async () => {
   document.querySelectorAll(".deleteBtn").forEach((btn) => {
     btn.addEventListener("click", async () => {
       await deleteRecord(btn.dataset.id);
-      console.log(`Record with ID ${btn.dataset.id} deleted`);
-      await loadRecords(); // 削除後に再読み込み
+      await loadRecords(uid); // 削除後に再読み込み
     });
   });
 };

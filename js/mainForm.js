@@ -1,78 +1,94 @@
 import { addRecord } from "./db.js";
 import { auth } from "./firebase.js";
-import { loadRecords } from "./mainView.js";
 
-// 選択画面：その他の入力欄表示切替
-function toggleOtherInput(selectElement, otherInputId, otherValue) {
-  const otherInput = document.getElementById(otherInputId);
-  if (!otherInput) return;
-  const isOtherSelected = selectElement.value === otherValue;
-  otherInput.style.display = isOtherSelected ? "block" : "none";
-  otherInput.required = isOtherSelected;
-  if (!isOtherSelected) {
-    otherInput.value = "";
+//セレクターの宣言
+const doSel = document.getElementById("doing");
+const testSel = document.getElementById("test");
+
+// その他の入力欄表示切替
+function toggleOther(sel, otherId, otherVal) {
+  //その他が存在するか？
+  const otherInp = document.getElementById(otherId);
+  if (!otherInp) return;
+
+  //選択された値がその他の値と同じなら切り替える
+  const isOtherSel = sel.value === otherVal;
+  otherInp.style.display = isOtherSel ? "block" : "none";
+  otherInp.required = isOtherSel;
+
+  //doingの６が選択されたらtestareaを表示
+  if (sel.id === "doing") {
+    const testArea = document.getElementById("testarea");
+    if (testArea) {
+      const isSel6 = doSel.value === "6";
+      testArea.style.display = isSel6 ? "block" : "none";
+    }
+  }
+
+  //その他以外が選択されたら入力欄をリセット
+  if (!isOtherSel) {
+    otherInp.value = "";
   }
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  const doingSelect = document.getElementById("doing");
-  const testSelect = document.getElementById("test");
+// ← 送信処理をmain.jsから呼び出す
+export const initForm = (onSubmit) => {
+  //入力欄の表示切替
+  window.addEventListener("DOMContentLoaded", () => {
+    if (doSel) {
+      //doingの９が選択されたらその他を表示
+      doSel.addEventListener("change", () =>
+        toggleOther(doSel, "doingOther", "9"),
+      );
+      toggleOther(doSel, "doingOther", "9");
+    }
+    if (testSel) {
+      testSel.addEventListener("change", () =>
+        toggleOther(testSel, "testOther", "4"),
+      );
+      toggleOther(testSel, "testOther", "4");
+    }
+  });
 
-  if (doingSelect) {
-    doingSelect.addEventListener("change", () => {
-      toggleOtherInput(doingSelect, "doingOther", "9");
+  // データ送信
+  document
+    .getElementById("recordForm")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const doOth = document.getElementById("doingOther");
+      const testOth = document.getElementById("testOther");
+
+      //その他の入力チェック
+      if (doSel.value === "9" && !doOth.value.trim()) {
+        alert("その他の活動内容を入力してください。");
+        doOth.focus();
+        return;
+      }
+      if (testSel.value === "4" && !testOth.value.trim()) {
+        alert("その他の試験内容を入力してください。");
+        testOth.focus();
+        return;
+      }
+
+      const data = {
+        uid: auth.currentUser.uid,
+        date: document.getElementById("date").value,
+        dayNum: document.getElementById("dayNum").value,
+        company: document.getElementById("company").value,
+        place: document.getElementById("place").value,
+        doing: doSel.value,
+        doingOther: doSel.value === "9" ? doOth.value : "",
+        test: testSel.value,
+        testOther: testSel.value === "4" ? testOth.value : "",
+      };
+
+      await addRecord("records", data);
+      await onSubmit(); // ← main.js から渡された loadRecords を呼ぶ
+
+      // 送信後にリセット
+      document.getElementById("testarea").style.display = "none";
+      alert("登録しました！");
+      e.target.reset();
     });
-    toggleOtherInput(doingSelect, "doingOther", "9");
-  }
-
-  if (testSelect) {
-    testSelect.addEventListener("change", () => {
-      toggleOtherInput(testSelect, "testOther", "4");
-    });
-    toggleOtherInput(testSelect, "testOther", "4");
-  }
-});
-
-// データ送信
-document.getElementById("recordForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const doingSelect = document.getElementById("doing");
-  const testSelect = document.getElementById("test");
-
-  const doingOtherInput = document.getElementById("doingOther");
-  const testOtherInput = document.getElementById("testOther");
-
-  if (doingSelect.value === "9" && !doingOtherInput.value.trim()) {
-    alert("活動内容が「その他」の場合、その他の活動内容を入力してください。");
-    doingOtherInput.focus();
-    return;
-  } else if (testSelect.value === "4" && !testOtherInput.value.trim()) {
-    alert("試験内容が「その他」の場合、その他の試験内容を入力してください。");
-    testOtherInput.focus();
-    return;
-  }
-
-  const data = {
-    uid: auth.currentUser.uid,
-    date: document.getElementById("date").value,
-    dayNum: document.getElementById("dayNum").value,
-    company: document.getElementById("company").value,
-    place: document.getElementById("place").value,
-    doing: doingSelect.value,
-    doingOther:
-      doingSelect.value === "9"
-        ? document.getElementById("doingOther").value
-        : "",
-    test: testSelect.value,
-    testOther:
-      testSelect.value === "4"
-        ? document.getElementById("testOther").value
-        : "",
-  };
-
-  await addRecord("records", data);
-  await loadRecords();
-  alert("登録しました！");
-  e.target.reset();
-});
+};

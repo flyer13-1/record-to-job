@@ -6,20 +6,19 @@ import {
   deleteDoc,
   doc,
   query,
-  orderBy,
+  where,
 } from "https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js";
 
 // データ送信
-export const addRecord = async (collectionName, data) => {
-  await addDoc(collection(db, collectionName), data);
+export const addRecord = async (colName, data) => {
+  await addDoc(collection(db, colName), data);
 };
 
-// データ取得（全件）
-export const getRecords = async (collectionName) => {
-  const q = query(collection(db, collectionName), orderBy("date", "asc"));
-  console.log(q);
+// データ取得（全件） ユーザ毎に変更
+export const getRecords = async (colName, uid) => {
+  const q = query(collection(db, colName), where("uid", "==", uid));
+
   const snapshot = await getDocs(q);
-  console.log(snapshot.docs.map((doc) => doc.data().date));
   return snapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
