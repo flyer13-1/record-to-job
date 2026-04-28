@@ -14,8 +14,8 @@ watchAuthState(
     init = true;
 
     // フォーム初期化（登録後にloadRecordsを呼ぶ）
-    initForm(() => loadRecords());
-    await loadRecords(); // ← 初回ロード
+    initForm(() => loadRecords(user.uid));
+    await loadRecords(user.uid); // ← 初回ロード
   },
   () => {
     window.location.href = "./index.html";
