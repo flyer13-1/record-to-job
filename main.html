@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/main.css" />
     <script defer type="module" src="js/auth.js"></script>
     <script defer type="module" src="js/main.js"></script>
     <title>main</title>
@@ -58,6 +59,7 @@
               id="doingOther"
               name="doingOther"
               style="display: none"
+              pattern="[\u3040-\u30FF\u4E00-\u9FFF]+"
               placeholder="その他の活動内容を入力してください"
             />
           </section>
@@ -77,6 +79,7 @@
               id="testOther"
               name="testOther"
               style="display: none"
+              pattern="[\u3040-\u30FF\u4E00-\u9FFF]+"
               placeholder="その他の試験内容を入力してください"
             />
           </section>

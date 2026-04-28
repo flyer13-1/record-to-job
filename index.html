@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/index.css" />
     <script defer type="module" src="js/auth.js"></script>
     <script defer type="module" src="js/index.js"></script>
     <title>login</title>
@@ -18,8 +19,26 @@
     </header>
 
     <main>
-      <button id="loginGoogle">Googleでログイン</button>
-      <button id="loginGithub">GitHubでログイン</button>
+      <button id="loginGoogle">
+        <img
+          src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/google.svg"
+          width="20"
+          height="20"
+          alt="Google"
+        />
+        Googleでログイン
+      </button>
+
+      <button id="loginGithub">
+        <img
+          src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg"
+          width="20"
+          height="20"
+          alt="GitHub"
+          style="filter: invert(1)"
+        />
+        GitHubでログイン
+      </button>
     </main>
   </body>
 </html>

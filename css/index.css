@@ -1,0 +1,215 @@
+/* ======================================================
+   Googleフォントの読み込み
+   Zen Maru Gothic → 見出し用の丸くてかわいいフォント
+   Noto Sans JP    → 本文用のシンプルで読みやすいフォント
+====================================================== */
+@import url("https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700;900&family=Noto+Sans+JP:wght@300;400;700&display=swap");
+
+/* ======================================================
+   リセット
+   ブラウザのデフォルトmargin/paddingを0にして統一
+   box-sizing: border-box → paddingやborderを
+   widthの内側に含める計算方式にする
+====================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ======================================================
+   CSS変数（カスタムプロパティ）
+   色などをここに集約。変えたいときはここだけ直せばOK！
+====================================================== */
+:root {
+  --color-bg: #f0f7ff; /* ページ全体の背景色（薄い青） */
+  --color-primary: #2563eb; /* メインカラー（青） */
+  --color-text: #1e293b; /* 本文テキストの色（濃いグレー） */
+
+  /* グラデーション → 135度の角度で左上から右下に色が変わる */
+  --color-header-bg: linear-gradient(
+    135deg,
+    #1d4ed8 0%,
+    #3b82f6 60%,
+    #60a5fa 100%
+  );
+
+  --radius: 16px; /* 角丸の大きさ */
+}
+
+/* ======================================================
+   html と body
+   min-height: 100vh → 画面の高さ100%以上を確保
+   （コンテンツが少なくても背景が途切れない）
+====================================================== */
+html,
+body {
+  min-height: 100vh;
+  background: var(--color-bg);
+  font-family: "Noto Sans JP", sans-serif;
+  color: var(--color-text);
+  line-height: 1.7; /* 行間（1.7は読みやすい値） */
+}
+
+body {
+  display: flex; /* 子要素をflexboxで管理する */
+  flex-direction: column; /* 縦並びにする */
+  align-items: center; /* 横方向に中央揃え */
+  padding: 40px 16px 60px; /* 上40px 左右16px 下60px の余白 */
+
+  /* 背景に薄い円形グラデーションを2つ重ねて奥行き感を出す装飾 */
+  background-image:
+    radial-gradient(circle at 15% 20%, #dbeafe 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, #e0f2fe 0%, transparent 40%);
+}
+
+/* ======================================================
+   header（ページ上部のタイトルエリア）
+====================================================== */
+header {
+  width: 100%;
+  max-width: 100%;
+  width: fit-content; /* コンテンツの幅に合わせる */
+  background: var(--color-header-bg); /* グラデーション背景 */
+  border-radius: var(--radius);
+  padding: 48px 36px 40px;
+  margin-bottom: 32px;
+  color: #fff;
+  text-align: center;
+
+  /* relative にすると ::before ::after の装飾を
+     このheaderを基準に絶対配置できるようになる */
+  position: relative;
+  overflow: hidden; /* 装飾がはみ出ても隠す */
+
+  /* box-shadow: 右へ 下へ ぼかし 色 */
+  box-shadow: 0 8px 32px rgba(29, 78, 216, 0.28);
+}
+
+/* headerの右上に薄い円を置く装飾 */
+/* ::before は content を書くだけで使える「幽霊要素」 */
+header::before {
+  content: ""; /* 疑似要素はこれが必須（空でもOK） */
+  position: absolute; /* header を基準に好きな位置に置ける */
+  top: -40px;
+  right: -40px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%; /* 正方形を円にする */
+  background: rgba(255, 255, 255, 0.08); /* 白の8%透明 */
+}
+
+/* headerの左下にも薄い円を置く */
+header::after {
+  content: "";
+  position: absolute;
+  bottom: -30px;
+  left: -30px;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* h1：一番大きい見出し */
+header h1 {
+  font-family: "Zen Maru Gothic", sans-serif;
+
+  /* clamp(最小値, 理想値, 最大値) */
+  /* 画面が狭いと1.8rem、広くなるにつれて大きくなり最大2.8rem */
+  /* vw = viewport width（画面幅の%）*/
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+
+  font-weight: 900; /* 太さ（100〜900、900が最も太い） */
+  letter-spacing: 0.02em; /* 文字間隔（emは親フォントサイズ基準） */
+  line-height: 1.25;
+  margin-bottom: 12px;
+
+  /* text-shadow: 右 下 ぼかし 色 */
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* h2：h1より小さい見出し */
+header h2 {
+  font-family: "Zen Maru Gothic", sans-serif;
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-weight: 700;
+  margin-bottom: 18px;
+  opacity: 0.92; /* 少し透明にしてh1より目立たなくする（0〜1） */
+}
+
+/* p：説明文 */
+header p {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  opacity: 0.88;
+  font-weight: 300; /* 細めにして本文らしく */
+}
+
+/* ======================================================
+   main（ログインボタンを置くエリア）
+====================================================== */
+main {
+  width: 100%;
+  max-width: 620px;
+  display: flex;
+  flex-direction: column; /* ボタンを縦並びに */
+  gap: 14px; /* 子要素同士の間隔 */
+}
+
+/* ======================================================
+   button（ログインボタン共通スタイル）
+====================================================== */
+button {
+  width: 100%;
+  padding: 16px 24px;
+  border: none; /* デフォルトの枠線を消す */
+  border-radius: 12px;
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer; /* マウスをのせたとき指マークにする */
+
+  display: flex;
+  align-items: center; /* アイコンとテキストを縦方向中央に揃える */
+  justify-content: center; /* 横方向も中央に */
+  gap: 10px; /* アイコンとテキストの間隔 */
+
+  /* 変化させたいプロパティと時間を指定 */
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s,
+    filter 0.15s;
+
+  letter-spacing: 0.03em;
+}
+
+/* ホバー時：少し浮いてちょっと明るくなる */
+button:hover {
+  transform: translateY(-2px); /* 上に2px動かす */
+  filter: brightness(1.06); /* 明るさを1.06倍にする */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* クリック時：元の位置に戻す */
+button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Googleボタン個別：白背景・グレー枠線 */
+#loginGoogle {
+  background: #f1f3f4; /* Googleっぽいライトグレー */
+  color: #1a1a1a;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* GitHubボタン個別：濃いネイビー背景・白文字 */
+#loginGithub {
+  background: #1e293b;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(30, 41, 59, 0.25);
+}

@@ -1,0 +1,312 @@
+/* ======================================================
+   Googleフォントの読み込み
+   Zen Maru Gothic → 見出し用の丸くてかわいいフォント
+   Noto Sans JP    → 本文用のシンプルで読みやすいフォント
+====================================================== */
+@import url("https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700;900&family=Noto+Sans+JP:wght@300;400;700&display=swap");
+
+/* ======================================================
+   リセット
+   ブラウザのデフォルトmargin/paddingを0にして統一
+   box-sizing: border-box → paddingやborderを
+   widthの内側に含める計算方式にする
+====================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ======================================================
+   CSS変数
+   色などをここに集約。変えたいときはここだけ直せばOK！
+====================================================== */
+:root {
+  --color-bg: #f0f7ff; /* ページ全体の背景色（薄い青） */
+  --color-surface: #ffffff; /* カードの背景色（白） */
+  --color-primary: #2563eb; /* メインカラー（青） */
+  --color-text: #1e293b; /* 本文テキストの色（濃いグレー） */
+  --color-muted: #64748b; /* 補足テキストの色（薄いグレー） */
+  --color-border: #bfdbfe; /* 枠線の色（薄い青） */
+
+  /* グラデーション → 135度の角度で左上から右下に色が変わる */
+  --color-header-bg: linear-gradient(
+    135deg,
+    #1d4ed8 0%,
+    #3b82f6 60%,
+    #60a5fa 100%
+  );
+
+  --radius: 16px; /* 角丸の大きさ */
+  --border-dash: 2px dashed var(--color-border); /* 点線枠のスタイル */
+}
+
+/* ======================================================
+   html と body
+====================================================== */
+html,
+body {
+  min-height: 100vh;
+  background: var(--color-bg);
+  font-family: "Noto Sans JP", sans-serif;
+  color: var(--color-text);
+  line-height: 1.7;
+}
+
+body {
+  display: flex;
+  flex-direction: column; /* 縦並びにする */
+  align-items: center; /* 横方向に中央揃え */
+  padding: 0 0 60px;
+
+  /* 背景に薄い円形グラデーションを重ねた装飾 */
+  background-image:
+    radial-gradient(circle at 10% 15%, #dbeafe 0%, transparent 35%),
+    radial-gradient(circle at 90% 85%, #e0f2fe 0%, transparent 35%);
+}
+
+/* ======================================================
+   header（ページ上部の横長バー）
+====================================================== */
+header {
+  width: 100%;
+  background: var(--color-header-bg); /* グラデーション背景 */
+  padding: 32px 40px;
+  color: #fff;
+
+  display: grid;
+  /* 3列構成：左の空白 | 中央のh1 | 右のボタン */
+  /* 左列と右列を同じ幅にすることでh1が真ん中に来る */
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 20px;
+
+  box-shadow: 0 6px 28px rgba(29, 78, 216, 0.22);
+  position: relative;
+  overflow: hidden; /* 装飾がはみ出ても隠す */
+  margin-bottom: 40px;
+}
+
+/* headerの右上に薄い円を置く装飾 */
+header::before {
+  content: "";
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+  pointer-events: none; /* クリックイベントを無効化（装飾なので） */
+}
+
+header h1 {
+  font-family: "Zen Maru Gothic", sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.6rem); /* 画面幅に応じてサイズが変わる */
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  text-align: center; /* h1を中央揃え */
+}
+
+/* ログアウトボタンを右端に寄せる */
+#logout {
+  justify-self: end;
+}
+
+/* ======================================================
+   main（コンテンツエリア）
+====================================================== */
+main {
+  width: 90%; /* 画面幅の90% */
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px; /* articleとarticleの間隔 */
+}
+
+/* ======================================================
+   article（点線の枠がつくカード）
+   各セクションをこのタグで囲む想定
+====================================================== */
+article {
+  border: var(--border-dash); /* 点線枠 */
+  border-radius: var(--radius); /* 角丸 */
+  background: var(--color-surface); /* 白背景 */
+  padding: 32px 36px;
+
+  /* box-shadow: 右 下 ぼかし 色 */
+  box-shadow: 0 4px 24px rgba(37, 99, 235, 0.06);
+  transition: box-shadow 0.2s;
+}
+
+article:hover {
+  box-shadow: 0 8px 32px rgba(37, 99, 235, 0.12);
+}
+
+/* article内の見出し（h2） */
+article h2 {
+  font-family: "Zen Maru Gothic", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--color-border); /* 下線で区切る */
+  letter-spacing: 0.04em;
+}
+
+/* ======================================================
+   form（登録フォーム）
+====================================================== */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* 各sectionの間隔 */
+}
+
+/* form内の各項目ブロック */
+section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* labelとinputの間隔 */
+}
+
+label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--color-muted); /* 薄いグレーで補足っぽく */
+  letter-spacing: 0.03em;
+}
+
+/* input・select・textarea 共通 */
+input,
+select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 2px solid var(--color-border); /* 薄い青の枠線 */
+  border-radius: 10px;
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  background: #fff;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+  outline: none; /* デフォルトのフォーカス枠を消す（下のfocusで自前設定） */
+}
+
+/* フォーカス時（クリックして入力中）：枠線を青くしてハイライト */
+input:focus,
+select:focus {
+  border-color: var(--color-primary);
+  /* 外側に薄い青の光彩を追加 */
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* ======================================================
+   button（汎用ボタン）
+   header内の「ログアウト」ボタンと
+   form内の「登録」ボタン（input[type=submit]）に適用
+====================================================== */
+button,
+input[type="submit"] {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer; /* マウスをのせたとき指マークにする */
+  background: var(--color-primary);
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(37, 99, 235, 0.2);
+  transition:
+    transform 0.15s,
+    box-shadow 0.15s,
+    filter 0.15s;
+  letter-spacing: 0.03em;
+}
+
+/* ホバー時：少し浮いてちょっと明るくなる */
+button:hover,
+input[type="submit"]:hover {
+  transform: translateY(-2px); /* 上に2px動かす */
+  filter: brightness(1.08); /* 明るさを1.08倍にする */
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.3);
+}
+
+/* クリック時：元の位置に戻す */
+button:active,
+input[type="submit"]:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* ログアウトボタン個別：白文字・透明背景・白枠線 */
+#logout {
+  background: transparent;
+  color: #fff;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: none;
+}
+
+#logout:hover {
+  background: rgba(255, 255, 255, 0.15); /* ホバーで薄く白くなる */
+  box-shadow: none;
+}
+
+/* ======================================================
+   table（テーブル）
+   テーブルを .table-wrapper で囲むと横スクロール対応になる
+   ただし今のHTMLには .table-wrapper がないので
+   article に overflow-x: auto を指定してスクロール対応にしてる
+====================================================== */
+#viewPage {
+  overflow-x: auto; /* 横にはみ出たらスクロールバーを表示 */
+  -webkit-overflow-scrolling: touch; /* iOSでスムーズスクロールにする */
+}
+
+table {
+  width: 100%;
+  min-width: 700px; /* これより小さくならない → 超えたらスクロール */
+  border-collapse: collapse; /* セル間の隙間をなくす */
+  font-size: 0.95rem;
+}
+
+/* テーブルのヘッダー行 */
+thead {
+  background: var(--color-primary); /* 青背景 */
+  color: #fff;
+}
+
+thead th {
+  padding: 18px 22px; /* セルを大きく見せる余白 */
+  font-weight: 700;
+  font-family: "Zen Maru Gothic", sans-serif;
+  letter-spacing: 0.04em;
+  white-space: nowrap; /* テキストを折り返さない */
+  text-align: left;
+}
+
+/* nth-child(even) → 偶数行（2,4,6...）にだけ背景色をつける */
+tbody tr:nth-child(even) {
+  background: #f0f7ff;
+}
+
+/* ホバー時：その行をハイライト */
+tbody tr:hover {
+  background: #dbeafe;
+  transition: background 0.15s;
+}
+
+/* データセル */
+td {
+  padding: 18px 22px; /* 余白を大きめにしてセルを大きく */
+  border-bottom: 1px solid #e2e8f0; /* 行の下に薄い区切り線 */
+  vertical-align: middle; /* セル内テキストを縦方向中央に */
+  min-width: 130px; /* 各列の最小幅 */
+}

@@ -7,25 +7,13 @@ const testSel = document.getElementById("test");
 
 // その他の入力欄表示切替
 function toggleOther(sel, otherId, otherVal) {
-  //その他が存在するか？
   const otherInp = document.getElementById(otherId);
   if (!otherInp) return;
 
-  //選択された値がその他の値と同じなら切り替える
   const isOtherSel = sel.value === otherVal;
   otherInp.style.display = isOtherSel ? "block" : "none";
   otherInp.required = isOtherSel;
 
-  //doingの６が選択されたらtestareaを表示
-  if (sel.id === "doing") {
-    const testArea = document.getElementById("testarea");
-    if (testArea) {
-      const isSel6 = doSel.value === "6";
-      testArea.style.display = isSel6 ? "block" : "none";
-    }
-  }
-
-  //その他以外が選択されたら入力欄をリセット
   if (!isOtherSel) {
     otherInp.value = "";
   }
@@ -33,13 +21,15 @@ function toggleOther(sel, otherId, otherVal) {
 
 // ← 送信処理をmain.jsから呼び出す
 export const initForm = (onSubmit) => {
-  //入力欄の表示切替
   window.addEventListener("DOMContentLoaded", () => {
     if (doSel) {
-      //doingの９が選択されたらその他を表示
-      doSel.addEventListener("change", () =>
-        toggleOther(doSel, "doingOther", "9"),
-      );
+      doSel.addEventListener("change", () => {
+        toggleOther(doSel, "doingOther", "9");
+        // testareaの切替
+        const testArea = document.getElementById("testarea");
+        if (testArea)
+          testArea.style.display = doSel.value === "6" ? "block" : "none";
+      });
       toggleOther(doSel, "doingOther", "9");
     }
     if (testSel) {
@@ -59,7 +49,6 @@ export const initForm = (onSubmit) => {
       const doOth = document.getElementById("doingOther");
       const testOth = document.getElementById("testOther");
 
-      //その他の入力チェック
       if (doSel.value === "9" && !doOth.value.trim()) {
         alert("その他の活動内容を入力してください。");
         doOth.focus();
@@ -84,9 +73,8 @@ export const initForm = (onSubmit) => {
       };
 
       await addRecord("records", data);
-      await onSubmit(); // ← main.js から渡された loadRecords を呼ぶ
+      await onSubmit();
 
-      // 送信後にリセット
       document.getElementById("testarea").style.display = "none";
       alert("登録しました！");
       e.target.reset();
