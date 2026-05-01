@@ -46,8 +46,10 @@ export const loadRecords = async (uid) => {
   // 削除ボタンのイベント
   document.querySelectorAll(".deleteBtn").forEach((btn) => {
     btn.addEventListener("click", async () => {
-      await deleteRecord(btn.dataset.id);
-      await loadRecords(uid); // 削除後に再読み込み
+      if (window.confirm("本当に削除しますか？")) {
+        await deleteRecord(btn.dataset.id);
+        await loadRecords(uid); // 削除後に再読み込み
+      }
     });
   });
 };
